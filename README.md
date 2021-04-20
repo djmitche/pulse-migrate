@@ -18,5 +18,5 @@ destination:
 # changes to make to the data
 transform:
   # vhosts to include (all others ignored)
-  vhosts: [user1, user1, ..]
+  vhosts: [vhost1, vhost2, ..]
 ```
