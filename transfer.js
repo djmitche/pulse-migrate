@@ -1,6 +1,6 @@
-const yaml = require('js-yaml');
-const fs = require('fs');
-const got = require('got');
+import yaml from 'js-yaml';
+import fs from 'fs';
+import got from 'got';
 
 const fetchDefs = async ({ host, username, password }) => {
   const res = await got(`https://${host}/api/definitions`, { username, password, responseType: 'json' });
@@ -14,7 +14,8 @@ const transformDefs = ({ users, vhosts, permissions, parameters, policies, queue
 
   // users
   // -- copy all users
-  res.users = users;
+  res.users = users
+  .map(user => ({ ...user, hashing_algorithm: 'rabbit_password_hashing_md5' }));
 
   // vhosts
   // -- drop vhosts other than those in allow list
@@ -24,6 +25,7 @@ const transformDefs = ({ users, vhosts, permissions, parameters, policies, queue
   res.permissions = permissions.filter(({ vhost }) => allowedVhosts.has(vhost));
 
   // parameters
+  // -- parameters are output-only
 
   // policies
   // -- all policies are created by CloudAMQP / RabbitMQ and need not be transferred
@@ -41,12 +43,16 @@ const transformDefs = ({ users, vhosts, permissions, parameters, policies, queue
   return res;
 };
 
+const importDefs = async (defs, { host, username, password }) => {
+  await got.post(`https://${host}/api/definitions`, { username, password, json: defs });
+};
+
 const main = async configFile => {
   const config = yaml.load(fs.readFileSync(configFile));
 
   const sourceDefs = await fetchDefs(config.source);
   const destDefs = transformDefs(sourceDefs, config.transform);
-  console.log(destDefs);
+  await importDefs(destDefs, config.destination);
 };
 
 main(process.argv[2]).then(

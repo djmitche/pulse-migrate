@@ -1,6 +1,8 @@
 {
+  "type": "module",
   "dependencies": {
     "got": "^11.8.2",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "p-queue": "^7.1.0"
   }
 }
