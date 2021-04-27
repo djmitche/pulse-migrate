@@ -21,7 +21,16 @@ transform:
   vhosts: [vhost1, vhost2, ..]
 # configuration for consuming messages
 listen:
-  host: ..
+- host: ..
+  username: ..
+  password: ..
+  vhost: ..
+  queues:
+  - name: ..
+    bindings:
+    - exchange: ..
+      routingKeyPattern: ..
+- host: ..
   username: ..
   password: ..
   vhost: ..
