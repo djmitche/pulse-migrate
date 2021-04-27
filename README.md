@@ -19,4 +19,15 @@ destination:
 transform:
   # vhosts to include (all others ignored)
   vhosts: [vhost1, vhost2, ..]
+# configuration for consuming messages
+listen:
+  host: ..
+  username: ..
+  password: ..
+  vhost: ..
+  queues:
+  - name: ..
+    bindings:
+    - exchange: ..
+      routingKeyPattern: ..
 ```
