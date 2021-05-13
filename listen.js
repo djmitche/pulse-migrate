@@ -9,6 +9,7 @@ const main = async configFile => {
 
     const conn = await amqp.connect(url);
     const chan = await conn.createChannel();
+    console.log("connected");
 
     for (const { name, bindings } of queues) {
       await chan.assertQueue(name, { autoDelete: true });
